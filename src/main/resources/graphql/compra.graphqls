@@ -1,0 +1,31 @@
+type Compra {
+	id: ID!
+	quantidade: Int!
+	status: String!
+	cliente: Cliente!
+	produto: Produto!
+}
+
+input CompraInput {
+	quantidade: Int!
+	clienteId: Int!
+	produtoId: Int!
+}
+
+input CompraFilter {
+	id: ID
+	quantidade: Int
+	status: String
+	clienteId: Int
+	produtoId: Int
+}
+
+extend type Query {
+	carregarCompra(id: ID!): Compra
+	listarCompras(filter: CompraFilter!): [Compra]!
+}
+
+extend type Mutation {
+	criarCompra(compra: CompraInput): Compra
+	removerCompra(id:ID!): Compra
+}
