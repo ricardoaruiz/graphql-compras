@@ -1,5 +1,7 @@
 package com.rar.compras.graphql.resolvers.compra.domain;
 
+import java.util.Date;
+
 import com.rar.compras.graphql.domain.BaseType;
 
 import lombok.AllArgsConstructor;
@@ -14,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class CompraInput extends BaseType {
 
 	private Long id;
+	private Date data;
 	private Integer quantidade;
 	private String status;
 	private Long clienteId;

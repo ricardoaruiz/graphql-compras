@@ -1,5 +1,6 @@
 type Compra {
 	id: ID!
+	data: Date!
 	quantidade: Int!
 	status: String!
 	cliente: Cliente!
@@ -8,12 +9,14 @@ type Compra {
 
 input CompraInput {
 	quantidade: Int!
+	data: Date
 	clienteId: Int!
 	produtoId: Int!
 }
 
 input CompraFilter {
 	id: ID
+	data: Date
 	quantidade: Int
 	status: String
 	clienteId: Int
