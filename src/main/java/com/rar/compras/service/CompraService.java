@@ -10,6 +10,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.rar.compras.graphql.exception.DomainException;
 import com.rar.compras.model.entity.Compra;
 import com.rar.compras.model.repository.ClienteRepository;
 import com.rar.compras.model.repository.CompraRepository;
@@ -58,6 +59,11 @@ public class CompraService {
 	
 	@Transactional
 	public Optional<CompraDTO> criarCompra(CompraDTO compra) {
+		
+		if(compra.getQuantidade() > 100) {
+			throw new DomainException("Quantidade máxima de itens por pedido excedida");
+		}
+		
 		compra.setStatus(CompraStatusEnum.NOVA.getDescription());
 		return Optional.ofNullable(compraRepository.save(compra.map(Compra.class)))
 			.map(cpr -> CompraDTO.fromEntity(cpr));
