@@ -14,6 +14,10 @@ class SimpleError extends GenericGraphQLError {
 	SimpleError(String message) {
         super(message);
     }
+	
+	SimpleError(String message, Throwable e) {
+		super(message + " - " + e.getMessage());
+	}
 
     @Override
     @JsonIgnore

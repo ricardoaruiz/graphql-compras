@@ -63,7 +63,7 @@ public class CompraService {
 		if(compra.getQuantidade() > 100) {
 			throw new DomainException("Quantidade máxima de itens por pedido excedida");
 		}
-		
+				
 		compra.setStatus(CompraStatusEnum.NOVA.getDescription());
 		return Optional.ofNullable(compraRepository.save(compra.map(Compra.class)))
 			.map(cpr -> CompraDTO.fromEntity(cpr));
