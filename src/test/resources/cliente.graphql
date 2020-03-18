@@ -1,0 +1,5 @@
+{
+	listarClientes(filter: {}) {
+		id, nome, email
+	}
+}

@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,7 @@ public class ClienteService {
 			.map(cli -> ClienteDTO.fromEntity(cli));
 	}
 	
+	@Cacheable("clientes")
 	@Transactional(readOnly = true)
 	public List<ClienteDTO> findAll(ClienteDTO clienteDTO) {
 		

@@ -6,6 +6,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +18,6 @@ import com.rar.compras.model.entity.Compra;
 import com.rar.compras.model.repository.ClienteRepository;
 import com.rar.compras.model.repository.CompraRepository;
 import com.rar.compras.service.dto.CompraDTO;
-import com.rar.compras.service.enumeration.CompraStatusEnum;
 
 @Service
 public class CompraService {
@@ -45,6 +47,7 @@ public class CompraService {
 			.collect(Collectors.toList());
 	}
 	
+	@Cacheable(value="comprasByCliente", key="#clienteId")
 	@Transactional(readOnly = true)
 	public List<CompraDTO> findAllByClienteId(Long clienteId) {		
 		return clienteRepository.findById(clienteId)
@@ -58,20 +61,26 @@ public class CompraService {
 	}
 	
 	@Transactional
+	@Caching(evict = {
+		@CacheEvict(value="comprasByCliente", key="#compra.clienteId"),
+		@CacheEvict(value="clientes", key="#compra.clienteId")
+	})
 	public Optional<CompraDTO> criarCompra(CompraDTO compra) {
 		
 		if(compra.getQuantidade() > 100) {
 			throw new DomainException("Quantidade máxima de itens por pedido excedida");
 		}
-				
-		compra.setStatus(CompraStatusEnum.NOVA.getDescription());
+					
 		return Optional.ofNullable(compraRepository.save(compra.map(Compra.class)))
-			.map(cpr -> CompraDTO.fromEntity(cpr));
+		.map(cpr -> CompraDTO.fromEntity(cpr));		
 	}
 	
 	@Transactional
-	public Optional<CompraDTO> removerCompra(Long id) {
-		return compraRepository.findById(id)
+	@Caching(evict = {
+			@CacheEvict(value="comprasByCliente", allEntries = true)
+	})
+	public Optional<CompraDTO> removerCompra(Long compraId) {
+		return compraRepository.findById(compraId)
 			.map(cpr -> {
 				compraRepository.delete(cpr);
 				return CompraDTO.fromEntity(cpr);

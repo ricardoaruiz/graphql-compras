@@ -3,6 +3,7 @@ package com.rar.compras.model.entity;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Cacheable
 @Data
 @NoArgsConstructor
 public class Produto {

@@ -18,7 +18,7 @@ public class CompraMutationResolver implements GraphQLMutationResolver {
 	public CompraType criarCompra(CompraInput compra) {
 		return compraService.criarCompra(compra.map(CompraDTO.class))
 			.map(cpr -> cpr.map(CompraType.class))
-			.orElse(null);
+			.orElse(null);	
 	}
 	
 	public CompraType removerCompra(Long id) {
